@@ -12,7 +12,7 @@ See [`specification.md`](./specification.md) for the full architecture.
 
 | | Pillar | Role | Repo |
 | :---: | --- | --- | --- |
-| _(image pending)_ | **Catchpole** | The Gateway | [`catchpole/`](https://github.com/quintindk/catchpole) |
+| <img src="docs/images/catchpole.jpg" alt="Catchpole" width="80"> | **Catchpole** | The Gateway | [`catchpole/`](https://github.com/quintindk/catchpole) |
 | <img src="docs/images/scribe.jpg" alt="Scribe" width="80"> | **Scribe** | The Record Keeper | [`scribe/`](https://github.com/quintindk/scribe) |
 | <img src="docs/images/miller.jpg" alt="Miller" width="80"> | **Miller** | The Background Grinder | [`miller/`](https://github.com/quintindk/miller) |
 | <img src="docs/images/bailiff.jpg" alt="Bailiff" width="80"> | **Bailiff** | The Delegate | [`bailiff/`](https://github.com/quintindk/bailiff) |
