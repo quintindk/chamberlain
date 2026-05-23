@@ -26,3 +26,20 @@ Already cloned? Pull submodules with:
 ```bash
 git submodule update --init --recursive
 ```
+
+## Bring up the rig
+
+The top-level `docker-compose.yaml` orchestrates the four rig-side services (Qdrant + Catchpole + Miller + Scribe) using Docker Compose's `include:` directive. Each pillar's own compose file remains the source of truth.
+
+```bash
+# from the repo root
+cp catchpole/.env.example catchpole/.env  # then edit secrets
+cp miller/.env.example    miller/.env
+cp scribe/.env.example    scribe/.env
+docker compose up -d
+docker compose logs -f
+```
+
+Bailiff is intentionally NOT in the top-level compose — it's a client-side component that runs next to the coding agent (typically on a laptop). Bring it up separately from its own folder when needed.
+
+Requires Docker Compose 2.20+ for `include:`.

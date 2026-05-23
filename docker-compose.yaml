@@ -1,0 +1,26 @@
+# Chamberlain rig-side stack
+#
+# Brings up the four "rig" services in one shot:
+#   - Qdrant       (vector store, ports 6333/6334)
+#   - Catchpole    (LiteLLM proxy, port 4000)
+#   - Miller       (cron ingester, no exposed port)
+#   - Scribe       (FastMCP RAG server, port 8000)
+#
+# Bailiff is intentionally NOT included here — it is a client-side
+# component that runs next to the coding agent (usually on a laptop).
+# See bailiff/docker-compose.yaml for that.
+#
+# Each pillar keeps its own docker-compose.yaml as the source of truth.
+# We just include them so the rig comes up with a single command:
+#
+#     docker compose up -d
+#
+# Requires Docker Compose 2.20+ for the `include:` directive.
+
+include:
+  - path: catchpole/docker-compose.yaml
+    project_directory: catchpole
+  - path: miller/docker-compose.yaml
+    project_directory: miller
+  - path: scribe/docker-compose.yaml
+    project_directory: scribe
