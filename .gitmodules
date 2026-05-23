@@ -1,0 +1,12 @@
+[submodule "catchpole"]
+	path = catchpole
+	url = https://github.com/quintindk/catchpole
+[submodule "scribe"]
+	path = scribe
+	url = https://github.com/quintindk/scribe
+[submodule "miller"]
+	path = miller
+	url = https://github.com/quintindk/miller
+[submodule "bailiff"]
+	path = bailiff
+	url = https://github.com/quintindk/bailiff
