@@ -40,7 +40,7 @@ graph TD
     end
 
     Agent -->|1. tool: query_knowledge_base| Bailiff
-    Bailiff -->|2. HTTP POST /v1/chat/completions| Catchpole
+    Bailiff -->|2. HTTP POST /v1/responses| Catchpole
     Catchpole -->|3. Routes Request| LMS
     LMS <-->|4. Internal MCP Search| Scribe
     Scribe <-->|5. Fetch vector chunks| DB
@@ -72,7 +72,7 @@ The Scribe is an MCP server attached directly to LM Studio, not the client. When
 
 **Flow:** `LM Studio -> Scribe (mcp-server-qdrant) -> Qdrant`
 
-**Deployment:** Runs alongside Qdrant in `docker-compose`. Uses FastMCP with SSE transport.
+**Deployment:** Runs alongside Qdrant in `docker-compose`. Uses FastMCP with streamable-http transport (the legacy SSE transport is deprecated and is not reliably picked up by current MCP clients).
 
 **LM Studio `mcp.json`:**
 
@@ -80,12 +80,13 @@ The Scribe is an MCP server attached directly to LM Studio, not the client. When
 {
   "mcpServers": {
     "scribe": {
-      "url": "http://localhost:8000/sse",
-      "transport": "sse"
+      "url": "http://localhost:8000/mcp"
     }
   }
 }
 ```
+
+> **Important:** LM Studio injects MCP tools only into its native chat UI and into the `/v1/responses` and `/api/v1/chat` endpoints. The OpenAI-compatible `/v1/chat/completions` endpoint does NOT receive MCP tools. Bailiff and any other API consumer that wants Scribe-backed RAG must use `/v1/responses` upstream.
 
 ---
 
