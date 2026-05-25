@@ -39,7 +39,7 @@ Never commit changes from inside a pillar via the meta-repo's index — the meta
 
 ## Architecture in one paragraph
 
-A coding agent (e.g. Copilot CLI) talks to **Bailiff** (client-side MCP, single `query_knowledge_base` tool). Bailiff POSTs OpenAI-compatible chat completions to **Catchpole** (LiteLLM proxy). Catchpole routes to LM Studio, which has **Scribe** (Qdrant MCP via SSE) attached at the inference layer for RAG over the codebase. **Miller** runs out-of-band on cron, diffing repos and upserting embeddings into the same Qdrant DB that Scribe reads from. The net effect: the agent receives a synthesised answer, never raw vector chunks, saving client context tokens. The pillars are named after a Knight Court of the Domain (KCD) administrative theme — keep that vocabulary in user-facing copy.
+A coding agent (e.g. Copilot CLI) talks to **Bailiff** (client-side MCP, single `ask` tool). Bailiff POSTs OpenAI-compatible chat completions to **Catchpole** (LiteLLM proxy). Catchpole routes to LM Studio, which has **Scribe** (Qdrant MCP via SSE) attached at the inference layer for RAG over the codebase. **Miller** runs out-of-band on cron, diffing repos and upserting embeddings into the same Qdrant DB that Scribe reads from. The net effect: the agent receives a synthesised answer, never raw vector chunks, saving client context tokens. The pillars are named after a Knight Court of the Domain (KCD) administrative theme — keep that vocabulary in user-facing copy.
 
 Request path: `Agent → Bailiff → Catchpole → LM Studio ↔ Scribe ↔ Qdrant`
 Ingestion path: `GitHub → Miller → Qdrant`
@@ -52,7 +52,7 @@ Ingestion path: `GitHub → Miller → Qdrant`
   - All tunables come from env vars with a `CATCHPOLE_*` prefix and sensible defaults; document them in the pillar's `README.md`.
   - `.env.example` committed, `.env` git-ignored.
   - Logging via a small `_log()` helper to stderr with a `[<pillar>]` prefix.
-- **Scribe** and **Bailiff** both expose MCP. Scribe uses **FastMCP with SSE transport**; Bailiff uses the **FastMCP SDK** and exposes a single tool `query_knowledge_base(query: str) -> str` returning synthesised markdown.
+- **Scribe** and **Bailiff** both expose MCP. Scribe uses **FastMCP with SSE transport**; Bailiff uses the **FastMCP SDK** and exposes a single tool `ask(query: str) -> str` returning synthesised markdown.
 - **Miller** is a lightweight Python container running cron (10-minute cadence), based on `maholick/github-qdrant-sync`. It must be idempotent — re-runs on unchanged repos are a no-op.
 
 ## Commands (meta-repo level)

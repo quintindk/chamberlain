@@ -39,7 +39,7 @@ graph TD
         GH[GitHub Repositories]
     end
 
-    Agent -->|1. tool: query_knowledge_base| Bailiff
+    Agent -->|1. tool: ask| Bailiff
     Bailiff -->|2. HTTP POST /v1/responses| Catchpole
     Catchpole -->|3. Routes Request| LMS
     LMS <-->|4. Internal MCP Search| Scribe
@@ -110,17 +110,18 @@ The Miller operates completely out-of-band from the main administrative loop. Gr
 - **Role:** Client-side Proxy Tool.
 - **Tech Stack:** Python, FastMCP SDK.
 
-The Bailiff is the only component the Coding Agent interacts with. It presents a single MCP tool (`query_knowledge_base`) to the agent. When the agent needs answers about the estate (codebase), the Bailiff wraps the query in an OpenAI-compatible payload and delegates it to Catchpole.
+The Bailiff is the only component the Coding Agent interacts with. It presents a single MCP tool (`ask`) to the agent. When the agent needs answers about the estate (codebase), the Bailiff wraps the query in an OpenAI-compatible payload and delegates it to Catchpole.
 
 **Flow:** `Coding Agent -> Bailiff -> Catchpole`
 
 **Tool Schema Definition:**
 
 ```python
-@mcp.tool(name="query_knowledge_base")
-async def query_knowledge_base(query: str) -> str:
+@mcp.tool(name="ask")
+async def ask(query: str) -> str:
     """
-    Query the unified local engineering knowledge base and synchronized repository context.
+    Ask the unified local engineering knowledge base a natural-language
+    question and receive a synthesised answer (not raw vector chunks).
     """
     # Sends HTTP request to Catchpole API URL
     # Returns synthesized markdown response
