@@ -16,6 +16,7 @@ See [`specification.md`](./specification.md) for the full architecture.
 | <img src="docs/images/scribe.jpg" alt="Scribe" width="80"> | **Scribe** | The Record Keeper | [`scribe/`](https://github.com/quintindk/scribe) |
 | <img src="docs/images/miller.jpg" alt="Miller" width="80"> | **Miller** | The Background Grinder | [`miller/`](https://github.com/quintindk/miller) |
 | <img src="docs/images/bailiff.jpg" alt="Bailiff" width="80"> | **Bailiff** | The Delegate | [`bailiff/`](https://github.com/quintindk/bailiff) |
+| | **Crier** | The Town Voice (embedded NPU SLM library) | [`crier/`](./crier) — scaffolded in-tree, pending repo |
 
 Each pillar lives in its own repository, wired in here as a git submodule.
 

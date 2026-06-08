@@ -10,3 +10,6 @@
 [submodule "bailiff"]
 	path = bailiff
 	url = https://github.com/quintindk/bailiff
+[submodule "crier"]
+	path = crier
+	url = https://github.com/quintindk/crier.git
