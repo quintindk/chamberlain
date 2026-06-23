@@ -2,13 +2,15 @@
 
 This is a **meta-repository**. It contains the architecture specification and wires the four pillars in as git submodules. Application code lives **inside the submodules**, not here.
 
-Authoritative architecture reference: [`specification.md`](../specification.md). Read it before making non-trivial changes.
+Authoritative architecture reference: [`docs/specification.md`](../docs/specification.md). Read it before making non-trivial changes. Actors, scenarios, and requirements live in [`docs/requirements.md`](../docs/requirements.md).
 
 ## Repository shape
 
 ```
 chamberlain/              ← this meta-repo (quintindk/chamberlain)
-├── specification.md      ← the source of truth for the architecture
+├── docs/
+│   ├── specification.md  ← the source of truth for the architecture
+│   └── requirements.md   ← actors, scenarios, and requirements
 ├── catchpole/            ← submodule → quintindk/catchpole (Gateway, LiteLLM)
 ├── scribe/               ← submodule → quintindk/scribe    (RAG MCP, Qdrant)
 ├── miller/               ← submodule → quintindk/miller    (Ingestion cron)
@@ -57,7 +59,7 @@ Ingestion path: `GitHub → Miller → Qdrant`
 
 ## Commands (meta-repo level)
 
-There is no build, test, or lint at the meta-repo level. The only meta-repo operations are submodule pointer bumps and editing `specification.md` / `README.md`.
+There is no build, test, or lint at the meta-repo level. The only meta-repo operations are submodule pointer bumps and editing `docs/specification.md` / `docs/requirements.md` / `README.md`.
 
 Pillar-level commands live in each pillar's `README.md`. Catchpole today:
 

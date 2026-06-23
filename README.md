@@ -6,7 +6,7 @@
 
 A four-pillar AI ecosystem providing highly contextual, agentic capabilities to a local or cloud-based coding agent. Decouples client execution, API routing, inference, and memory ingestion into discrete microservices.
 
-See [`specification.md`](./specification.md) for the full architecture.
+See [`docs/specification.md`](./docs/specification.md) for the full architecture and [`docs/requirements.md`](./docs/requirements.md) for the actors, scenarios, and requirements.
 
 ## Pillars
 
