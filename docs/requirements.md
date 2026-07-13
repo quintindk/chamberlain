@@ -1,6 +1,6 @@
-# Chamberlain Requirements
+# Household Requirements
 
-Chamberlain is a household of helpers in the service of one person, the Owner. Each helper is a named member of the household with a trade, a temperament, and a sense of how freely they speak. They meet the Owner, and one another, in rooms. They keep a shared Book of the Court that says who everyone is and how far each may be trusted. Work is done either by the household's own servant at home, which costs almost nothing, or by sending out to costly artisans in the city, who are clever but charge by the word.
+The household is a staff of helpers in the service of one person, the Owner. Each helper is a named member of the household with a trade, a temperament, and a sense of how freely they speak. The household is kept in order by its head of staff, the Chamberlain, who shares out great matters among the members and settles disagreements between them. They meet the Owner, and one another, in rooms. Each member is given a private Charter, written by the Owner, that sets out who it is, how freely it speaks, and the laws it may never break; and the household keeps a shared Roll, drawn from those Charters, by which the members may learn of one another. Work is done either by the household's own servant at home, which costs almost nothing, or by sending out to costly artisans in the city, who are clever but charge by the word.
 
 This document describes what the household must be able to do, and why. It does not say how any of it is built. The plumbing, the topology, and the technology choices live in [`specification.md`](./specification.md) and are deliberately kept out of here. The intent is that a reader can argue about whether the household behaves correctly without first agreeing on how it is wired.
 
@@ -8,61 +8,72 @@ This document describes what the household must be able to do, and why. It does 
 
 It is written as people in a household talking to and about one another, because that is how the design is meant to feel. The table below maps the household idiom to the system underneath, so nothing is lost when the time comes to build it.
 
-| In this document | In the system |
-| --- | --- |
-| The household, the Court | the multi-agent system as a whole |
-| A member, an officer | an individual agent |
-| The Owner | the single human user |
-| A room | a channel the Owner and members speak in (terminal, messaging app, voice) |
-| Calling someone by name | one member invoking another |
-| The household's own servant, work done at home | inference on the local home machine |
-| The costly artisans in the city | external frontier model providers |
-| The Book of the Court | the shared, Owner-authored description of every member |
-| What the household remembers | the persistent memory the members share and keep |
-| A confidence, a delicate matter | sensitive data |
-| The gatekeeper, the one who guards the gate | the point that decides what may be carried outside |
+| In this document                               | In the system                                                             |
+| ---------------------------------------------- | ------------------------------------------------------------------------- |
+| The household, the Court                       | the multi-agent system as a whole                                         |
+| A member, an officer                           | an individual agent                                                       |
+| The Chamberlain, the head of staff             | the orchestrating and arbitrating agent that keeps the household in order |
+| The Owner                                      | the single human user                                                     |
+| A room                                         | a channel the Owner and members speak in (terminal, messaging app, voice) |
+| Calling someone by name                        | one member invoking another                                               |
+| The household's own servant, work done at home | inference on the local home machine                                       |
+| The costly artisans in the city                | external frontier model providers                                         |
+| A member's Charter                             | the private, Owner-authored brief and laws for a single member            |
+| The Roll                                       | the shared directory of members, drawn from their Charters                |
+| What the household remembers                   | the persistent memory the members share and keep                          |
+| A confidence, a delicate matter                | sensitive data                                                            |
+| The gatekeeper, the one who guards the gate    | the point that decides what may be carried outside                        |
 
 ## 1. Who is in the story
 
 ### 1.1 The Owner
 
-| Member | Who they are |
-| --- | --- |
+| Member        | Who they are                                                                                                                                                                                                                                               |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **The Owner** | The one person the household serves. There is only ever one, and everything belongs to them. They speak to the household from wherever they happen to be, sometimes at the desk at home, often through a messaging app on the move, occasionally by voice. |
 
 ### 1.2 The household
 
 The members below are the household as it stands today. It is a living staff, not a fixed one: the Owner may take on new members over time. Each member is known by a trade, the rooms they usually work in, how delicate their matters tend to be, and whether they are permitted to speak first or must wait to be spoken to.
 
+**The head of staff:**
+
+| Member          | Their trade                                                                                                  | Usually found in       | How delicate their matters                       | Speaks first?                                                                     |
+| --------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------- |
+| **Chamberlain** | keeping the household in order: sharing out great matters among the members and settling their disagreements | wherever work is found | as delicate as whatever passes through its hands | yes, to keep order and to put a matter to the Owner when the members cannot agree |
+
+The Chamberlain stands above the staff rather than beside it. It keeps no trade of its own in the Owner's work or life; its office is order. It breaks a great matter that touches several trades into parts, gives each to the right member, and gathers the results back; and it settles disputes between members and contradictions in what the household remembers. It does not ration the servant: the members judge that for themselves (see 2.3).
+
 **Those who serve the Owner's work:**
 
-| Member | Their trade | Usually found in | How delicate their matters | Speaks first? |
-| --- | --- | --- | --- | --- |
-| **Mason** | Azure architecture, Bicep, diagrams, reading the estate's records | the workroom | moderately (the Owner's private papers) | no, waits to be asked |
-| **Smith** | writing and mending code, tests, the forge of small tools | the workroom | moderately (the Owner's private papers) | no, waits to be asked |
-| **Reeve** | the day's plan, sorting the post, keeping the diary | the messaging hall | lightly to moderately | yes, may raise the day's matters |
+| Member    | Their trade                                                       | Usually found in   | How delicate their matters              | Speaks first?                    |
+| --------- | ----------------------------------------------------------------- | ------------------ | --------------------------------------- | -------------------------------- |
+| **Mason** | Azure architecture, Bicep, diagrams, reading the estate's records | the workroom       | moderately (the Owner's private papers) | no, waits to be asked            |
+| **Smith** | writing and mending code, tests, the forge of small tools         | the workroom       | moderately (the Owner's private papers) | no, waits to be asked            |
+| **Reeve** | the day's plan, sorting the post, keeping the diary               | the messaging hall | lightly to moderately                   | yes, may raise the day's matters |
 
 **Those who serve the Owner's life:**
 
-| Member | Their trade | Usually found in | How delicate their matters | Speaks first? |
-| --- | --- | --- | --- | --- |
-| **Steward** | the house, the bills, money, the shopping | the messaging hall | highly (money matters) | yes |
-| **Physician** | health, training, sleep, temper | the messaging hall, by voice | most delicate of all (matters of the body) | yes |
-| **Herald** | friends, family, gifts, the social diary | the messaging hall | moderately | yes |
-| **Huntsman** | leisure, travel, pastimes | the messaging hall | lightly | now and then |
-| **Confessor** | the journal, reflection, private hopes | by voice, the quiet room | most delicate of all (matters of the heart) | never, speaks only when spoken to |
+| Member        | Their trade                               | Usually found in             | How delicate their matters                  | Speaks first?                     |
+| ------------- | ----------------------------------------- | ---------------------------- | ------------------------------------------- | --------------------------------- |
+| **Steward**   | the house, the bills, money, the shopping | the messaging hall           | highly (money matters)                      | yes                               |
+| **Physician** | health, training, sleep, temper           | the messaging hall, by voice | most delicate of all (matters of the body)  | yes                               |
+| **Herald**    | friends, family, gifts, the social diary  | the messaging hall           | moderately                                  | yes                               |
+| **Huntsman**  | leisure, travel, pastimes                 | the messaging hall           | lightly                                     | now and then                      |
+| **Confessor** | the journal, reflection, private hopes    | by voice, the quiet room     | most delicate of all (matters of the heart) | never, speaks only when spoken to |
 
 ### 1.3 The household's means and the wider world
 
-| Thing | What it is |
-| --- | --- |
-| **The servant** | A single capable servant at home that does the household's own work. It is willing but finite: it can hold only so much in mind at once and can attend to only so many tasks at the same time. |
-| **The artisans in the city** | Clever outside experts the household can commission when the servant is not enough. They are excellent and expensive, and they are strangers, so nothing said to them can ever be taken back. |
-| **The household's records** | The private papers and repositories the Owner keeps, which members may consult to answer well. |
-| **The household's memory** | What the household holds on to between conversations: what it knows of the Owner, each member's own working notes, and the techniques members have learned. |
-| **The rooms** | The places the Owner and the members meet and speak, whether the workroom, a messaging hall, or by voice. |
-| **The Book of the Court** | A shared account, written by the Owner, of who every member is and how freely each may speak. Any member may consult it before deciding what to say to another. |
-| **The gatekeeper** | The one who watches the door to the outside world and has the last word on what may be carried out to the artisans, whatever a member might wish. |
+| Thing                        | What it is                                                                                                                                                                                                                                         |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **The servant**              | A single capable servant at home that does the household's own work. It is willing but finite: it can hold only so much in mind at once and can attend to only so many tasks at the same time.                                                     |
+| **The artisans in the city** | Clever outside experts the household can commission when the servant is not enough. They are excellent and expensive, and they are strangers, so nothing said to them can ever be taken back.                                                      |
+| **The household's records**  | The private papers and repositories the Owner keeps, which members may consult to answer well.                                                                                                                                                     |
+| **The household's memory**   | What the household holds on to between conversations: what it knows of the Owner, each member's own working notes, and the techniques members have learned.                                                                                        |
+| **The rooms**                | The places the Owner and the members meet and speak, whether the workroom, a messaging hall, or by voice.                                                                                                                                          |
+| **A member's Charter**       | The private brief the Owner writes for a single member: its trade, its manner, how freely it speaks, and the laws it may never break. A member knows its own Charter and no other's.                                                               |
+| **The Roll**                 | A shared directory of the household, drawn from the members' Charters, by which any member may learn another's trade and how freely it speaks before deciding what to share. It shows each member's standing, not the private laws of its Charter. |
+| **The gatekeeper**           | The one who watches the door to the outside world and has the last word on what may be carried out to the artisans, whatever a member might wish.                                                                                                  |
 
 ## 2. Stories the household must handle
 
@@ -78,7 +89,7 @@ Later the Owner brings the Mason a thornier matter at the desk: look over this a
 
 ### 2.3 Too many hands reaching for one bench
 
-Several members want the servant at the same moment: the Reeve sorting the morning, the Mason wanting a weightier mind for a review, the household's quiet record-keeping needing attention, and the Smith waiting on an answer drawn from the papers. The servant can hold only so much in mind at once and attend to only so many tasks together. Someone must decide who is served now, who waits, and who is sent elsewhere. A member may be sent to an artisan simply because the servant is already busy, which is a different thing from being sent because the task was too hard.
+Several members want the servant at the same moment: the Reeve sorting the morning, the Mason wanting a weightier mind for a review, the household's quiet record-keeping needing attention, and the Smith waiting on an answer drawn from the papers. The servant can hold only so much in mind at once and attend to only so many tasks together, so it keeps a queue, taken in the order the work arrives, and the queue is plain for every member to see. Each member, seeing how long the wait will be, decides for itself whether to wait its turn or carry its work to an artisan in the city instead; no one is appointed to ration the servant. A member may turn to an artisan simply because the servant is busy, which is a different thing from turning to one because the task was too hard. But a member may send its work out only if the matter is not too delicate to leave the house: a confidential task must wait for the servant, however long the queue.
 
 ### 2.4 A trick learned by one, useful to another
 
@@ -86,7 +97,7 @@ While getting through a job, the Smith works out a handy way of doing something 
 
 ### 2.5 Two truths that no longer agree
 
-One member writes down something lasting about the Owner, a settled preference, say. Later the Owner tells a different member to do the opposite, for one particular piece of work. Now the household's memory holds two truths that disagree, and any member may stumble on either. The household must be able to notice, govern, or settle such disagreements, and must be clear about who is even allowed to write things down for everyone.
+One member writes down something lasting about the Owner, a settled preference, say. Later the Owner tells a different member to do the opposite, for one particular piece of work. Now the household's memory holds two truths that disagree, and any member may stumble on either. The household must be able to notice such a disagreement and bring it to the Chamberlain, whose office it is to settle it. It must also be clear about who is even allowed to write things down for everyone, and that the Chamberlain has the final say over what stands in the shared memory.
 
 ### 2.6 Words that must never leave the house
 
@@ -116,9 +127,9 @@ A member, mid-task, finds something outside its own trade. The Reeve, planning t
 
 The Smith, in the middle of building something, needs a ruling and not a rescue: is this the approved pattern here? It calls the Mason by name, gets a short answer, and carries on with its own task. The exchange stays in the same room and returns to where it started. The household must allow one member to borrow another's knowledge for a moment without handing the whole task over, and must be clear about whose standards of delicacy apply to what passes between them.
 
-### 2.13 Consulting the Book before speaking
+### 2.13 Consulting the Roll before speaking
 
-Before the Physician asks the Reeve to lighten the Owner's load because they are run down, the Physician should be able to look the Reeve up in the Book of the Court and see plainly that the Reeve is a talkative sort who deals with the outside world. Knowing that, the Physician asks only for what is needed ("ease tomorrow's load") and keeps the delicate reason to itself. The household must give every member a way to learn how discreet another is before deciding what to share, exactly as a careful person sizes up a confidant before speaking.
+Before the Physician asks the Reeve to lighten the Owner's load because they are run down, the Physician should be able to look the Reeve up in the Roll and see plainly that the Reeve is a talkative sort who deals with the outside world. Knowing that, the Physician asks only for what is needed ("ease tomorrow's load") and keeps the delicate reason to itself. The household must give every member a way to learn how discreet another is before deciding what to share, exactly as a careful person sizes up a confidant before speaking.
 
 ### 2.14 Word that ought to spread
 
@@ -126,15 +137,11 @@ The Steward learns the month is tight. The Huntsman is on the verge of proposing
 
 ### 2.15 A great matter shared out among many
 
-The Owner asks for something large that touches several trades at once: arrange a parent's seventieth birthday, which needs the Herald for the guest list, the Steward for the budget, and the Huntsman for the venue and travel. Something must be able to break the great matter into parts, give each part to the right member, and gather the results back into one answer. The household must support both this sharing-out of a goal and the quiet borrowing of a single answer, without forcing every exchange through one bottleneck.
+The Owner asks for something large that touches several trades at once: arrange a parent's seventieth birthday, which needs the Herald for the guest list, the Steward for the budget, and the Huntsman for the venue and travel. The Chamberlain, as head of staff, breaks the great matter into parts, gives each part to the right member, and gathers the results back into one answer. The household must support both this sharing-out of a goal by the Chamberlain and the quiet borrowing of a single answer directly between members (see 2.12), without forcing every exchange through one bottleneck: a member needing a quick word from another does not go by way of the Chamberlain.
 
 ### 2.16 Taking on a new member
 
 The Owner wishes to bring a new member into the household, with their own trade, their own usual rooms, their own degree of delicacy, their own leaning toward home or city, and their own leave to speak first. This must be possible without unsettling the existing members, and the newcomer should be able to draw on the household's shared memory and its established ways of working from the start.
-
-### 2.17 A member who serves more than the Owner
-
-In time a member may serve someone other than the Owner directly, a tutor for the Owner's children, for instance, and must keep firm, non-negotiable boundaries that differ from those of the Owner's own confidants. The household must be able to set such boundaries for a member without imposing them on everyone.
 
 ## 3. What the household must be able to do
 
@@ -144,89 +151,92 @@ Each requirement is written in the household's voice but is meant to be testable
 
 ### 3.1 What the household does (functional)
 
-| ID | The household shall... |
-| --- | --- |
-| FR-1 | let the Owner hold a conversation with it from wherever they are, whether at the desk or through a messaging hall. |
-| FR-2 | keep a staff of several distinct members in the Owner's service, each with its own trade, manner, and tools. |
-| FR-3 | let members consult the Owner's private records when they need to, and answer with a finished reply rather than a heap of raw clippings. |
-| FR-4 | keep its knowledge of those records current as they change, without anyone having to re-file everything by hand. |
-| FR-5 | decide, for each piece of work, whether it is done by the servant or sent to an artisan in the city. |
-| FR-6 | send a piece of work to an artisan when the servant is not equal to it. |
-| FR-7 | send a piece of work elsewhere when the servant is busy or absent, quite apart from whether the work was hard. |
-| FR-8 | remember things between conversations: what it knows of the Owner, each member's own working notes, and the techniques members have learned. |
-| FR-9 | let members set down and reuse techniques they have learned, and be clear whether a given technique belongs to one member alone or to the household. |
-| FR-10 | let the members who are permitted to do so raise matters with the Owner unbidden, whether on a schedule or when something happens. |
-| FR-11 | let the Owner take on a new member without unsettling the others, the newcomer drawing on the shared memory and established ways from the start. |
-| FR-12 | decide who is served and who waits when several members call on the servant at once. |
-| FR-13 | take spoken word from the Owner in the rooms where they prefer to speak rather than type. |
+| ID    | The household shall...                                                                                                                                                                                                 |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| FR-1  | let the Owner hold a conversation with it from wherever they are, whether at the desk or through a messaging hall.                                                                                                     |
+| FR-2  | keep a staff of several distinct members in the Owner's service, each with its own trade, manner, and tools.                                                                                                           |
+| FR-3  | let members consult the Owner's private records when they need to, and answer with a finished reply rather than a heap of raw clippings.                                                                               |
+| FR-4  | keep its knowledge of those records current as they change, without anyone having to re-file everything by hand.                                                                                                       |
+| FR-5  | decide, for each piece of work, whether it is done by the servant or sent to an artisan in the city.                                                                                                                   |
+| FR-6  | send a piece of work to an artisan when the servant is not equal to it.                                                                                                                                                |
+| FR-7  | send a piece of work elsewhere when the servant is busy or absent, quite apart from whether the work was hard.                                                                                                         |
+| FR-8  | remember things between conversations: what it knows of the Owner, each member's own working notes, and the techniques members have learned.                                                                           |
+| FR-9  | let members set down and reuse techniques they have learned, and be clear whether a given technique belongs to one member alone or to the household.                                                                   |
+| FR-10 | let the members who are permitted to do so raise matters with the Owner unbidden, whether on a schedule or when something happens.                                                                                     |
+| FR-11 | let the Owner take on a new member without unsettling the others, the newcomer drawing on the shared memory and established ways from the start.                                                                       |
+| FR-12 | show every member the servant's queue and let each member decide for itself whether to wait for the servant or carry its work to an artisan, rather than appointing anyone to ration the servant.                      |
+| FR-13 | take spoken word from the Owner in the rooms where they prefer to speak rather than type.                                                                                                                              |
+| FR-14 | keep a head of staff, the Chamberlain, that breaks a great matter into parts for several members and gathers the results back, and that settles disagreements between members and contradictions in the shared memory. |
 
 ### 3.2 What the household remembers (memory)
 
-| ID | The household shall... |
-| --- | --- |
-| MR-1 | keep at least three kinds of memory apart: what is known of the Owner, each member's own working notes, and the techniques members have learned. |
-| MR-2 | let what is known of the Owner be shared among the members permitted to read it, so they need not each learn the Owner afresh. |
-| MR-3 | keep each member's working notes to itself, so one member's busywork does not clutter another's mind. |
-| MR-4 | guard what is written into the shared memory, holding shared writing to a higher standard than a member's private notes. |
-| MR-5 | be able to notice or settle two remembered truths that disagree. |
-| MR-6 | mark how delicate each remembered thing is, and let that mark govern who, and which outsiders, may ever read it. |
-| MR-7 | keep the provenance of what it remembers: where a thing came from, or the words in which the Owner said it. |
+| ID   | The household shall...                                                                                                                                              |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MR-1 | keep at least three kinds of memory apart: what is known of the Owner, each member's own working notes, and the techniques members have learned.                    |
+| MR-2 | let what is known of the Owner be shared among the members permitted to read it, so they need not each learn the Owner afresh.                                      |
+| MR-3 | keep each member's working notes to itself, so one member's busywork does not clutter another's mind.                                                               |
+| MR-4 | guard what is written into the shared memory, holding shared writing to a higher standard than a member's private notes.                                            |
+| MR-5 | notice when two remembered truths disagree and bring them to the Chamberlain to settle, the Chamberlain having the final say over what stands in the shared memory. |
+| MR-6 | mark how delicate each remembered thing is, and let that mark govern who, and which outsiders, may ever read it.                                                    |
+| MR-7 | keep the provenance of what it remembers: where a thing came from, or the words in which the Owner said it.                                                         |
 
 ### 3.3 Where the work is done, and what it costs (thrift and routing)
 
-| ID | The household shall... | Rank |
-| --- | --- | --- |
-| CR-1 | prefer its own servant for any work it can manage, so the Owner spends as little as possible. | Highest |
-| CR-2 | keep an artisan in the city within reach for work the servant cannot manage. | High |
-| CR-3 | treat the delicacy of a matter as belonging to the member and to the particular task, able to overrule thrift, keeping a delicate matter at home even when sending it out would be cheaper or faster. | High |
-| CR-4 | be clear, for each member and each task, what happens when the servant is unavailable: send out, hold, or set aside. | Medium |
-| CR-5 | weigh a busy servant as a reason to send work out, separately from whether the work itself was hard. | Medium |
+| ID   | The household shall...                                                                                                                                                                                | Rank    |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| CR-1 | prefer its own servant for any work it can manage, so the Owner spends as little as possible.                                                                                                         | Highest |
+| CR-2 | keep an artisan in the city within reach for work the servant cannot manage.                                                                                                                          | High    |
+| CR-3 | treat the delicacy of a matter as belonging to the member and to the particular task, able to overrule thrift, keeping a delicate matter at home even when sending it out would be cheaper or faster. | High    |
+| CR-4 | be clear, for each member and each task, what happens when the servant is unavailable: send out, hold, or set aside.                                                                                  | Medium  |
+| CR-5 | weigh a busy servant as a reason to send work out, separately from whether the work itself was hard.                                                                                                  | Medium  |
+| CR-6 | let a member send work to an artisan only when the matter's delicacy permits it to leave the house; a confidential task waits for the servant, however busy or absent it is.                          | High    |
 
 ### 3.4 How the members speak among themselves (the Court and its conversations)
 
-| ID | The household shall... |
-| --- | --- |
-| CV-1 | let one member call another by name to hand over a matter that belongs to the other's trade. |
-| CV-2 | let one member borrow a brief answer from another without handing over the whole task, the exchange returning to where it began. |
-| CV-3 | let one member's news reach the other members whose conduct it ought to change. |
-| CV-4 | let a great matter be shared out among several members and the results gathered back into one answer, without forcing every exchange through a single bottleneck. |
-| CV-5 | keep a Book of the Court, written by the Owner, describing each member, its trade, and how freely it speaks, which any member may consult. |
-| CV-6 | let a member consult the Book of the Court before deciding what to tell another, so it may share only what is needed and keep back what is not. |
-| CV-7 | keep exchanges between members open to the Owner rather than whispered, so the Owner can see what was passed and what it may cost. |
+| ID   | The household shall...                                                                                                                                                          |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CV-1 | let one member call another by name to hand over a matter that belongs to the other's trade.                                                                                    |
+| CV-2 | let one member borrow a brief answer from another without handing over the whole task, the exchange returning to where it began.                                                |
+| CV-3 | let one member's news reach the other members whose conduct it ought to change.                                                                                                 |
+| CV-4 | let a great matter be shared out among several members and the results gathered back into one answer, without forcing every exchange through a single bottleneck.               |
+| CV-5 | keep a shared Roll, drawn from the members' Charters, describing each member, its trade, and how freely it speaks, which any member may consult.                                |
+| CV-6 | let a member consult the Roll before deciding what to tell another, so it may share only what is needed and keep back what is not.                                              |
+| CV-7 | keep exchanges between members open to the Owner rather than whispered, so the Owner can see what was passed and what it may cost.                                              |
+| CV-8 | give each member a private Charter, written by the Owner, setting out its trade, its manner, how freely it speaks, and the laws it may never break, known to that member alone. |
 
 ### 3.5 The rooms in which they meet (rooms and reaching the Owner)
 
-| ID | The household shall... |
-| --- | --- |
-| RM-1 | provide rooms in which the Owner and the members meet and speak: the workroom, the messaging halls, and the quiet room for spoken word. |
-| RM-2 | let a member be summoned into a conversation by name, into the room where the conversation is taking place. |
+| ID   | The household shall...                                                                                                                           |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| RM-1 | provide rooms in which the Owner and the members meet and speak: the workroom, the messaging halls, and the quiet room for spoken word.          |
+| RM-2 | let a member be summoned into a conversation by name, into the room where the conversation is taking place.                                      |
 | RM-3 | be clear about which members belong in which rooms, and keep a room's conversation within that room unless it is deliberately carried elsewhere. |
-| RM-4 | stay within reach of the Owner through a messaging hall when the Owner is away from home. |
-| RM-5 | let the members permitted to speak first reach the Owner even when the Owner is away from home. |
+| RM-4 | stay within reach of the Owner through a messaging hall when the Owner is away from home.                                                        |
+| RM-5 | let the members permitted to speak first reach the Owner even when the Owner is away from home.                                                  |
 
 ### 3.6 Trust, discretion, and confidences (the duty of care)
 
-| ID | The household shall... |
-| --- | --- |
-| SR-1 | give each member a standing that says how delicate its matters are and how far its words and work may travel. |
-| SR-2 | guarantee that the most delicate matters (health, money, the confidences of the heart) are never carried out to an artisan in the city. |
-| SR-3 | hold discretion as the first line: a member should share with another only what the other needs to know, judged against the Book of the Court, keeping delicate reasons to itself. |
+| ID   | The household shall...                                                                                                                                                                                      |
+| ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SR-1 | give each member a standing that says how delicate its matters are and how far its words and work may travel.                                                                                               |
+| SR-2 | guarantee that the most delicate matters (health, money, the confidences of the heart) are never carried out to an artisan in the city.                                                                     |
+| SR-3 | hold discretion as the first line: a member should share with another only what the other needs to know, judged against the Roll, keeping delicate reasons to itself.                                       |
 | SR-4 | keep the gatekeeper as the last line: whatever a member intends, the gatekeeper has the final say over what may be carried out to the city, and may overrule a member's wish to send a delicate matter out. |
-| SR-5 | ensure that the delicacy of a thing travels with it from member to member, so that the gatekeeper can judge it by what it truly is and not by who happens to be carrying it. |
-| SR-6 | keep a confidence from being read by a member, or an outsider, not entitled to it, including by the back stair of shared memory when a member is dealing with the city. |
-| SR-7 | let each member's leave to speak first be set on its own: whether it may, in which rooms, and how often and how insistently it may interrupt the Owner. |
-| SR-8 | let firm, non-negotiable boundaries be set for a member who serves someone other than the Owner, without imposing them on the rest. |
-| SR-9 | keep safe the keys and secrets used to reach the servant, the artisans, and the rooms. |
+| SR-5 | ensure that the delicacy of a thing travels with it from member to member, so that the gatekeeper can judge it by what it truly is and not by who happens to be carrying it.                                |
+| SR-6 | keep a confidence from being read by a member, or an outsider, not entitled to it, including by the back stair of shared memory when a member is dealing with the city.                                     |
+| SR-7 | let each member's leave to speak first be set on its own: whether it may, in which rooms, and how often and how insistently it may interrupt the Owner.                                                     |
+| SR-8 | let the Owner set laws upon a member, written in its Charter, that the member may never break, whatever it is asked: a cap on what it may spend, say, or a thing it may never do unbidden.                 |
+| SR-9 | keep safe the keys and secrets used to reach the servant, the artisans, and the rooms.                                                                                                                      |
 
 ### 3.7 Keeping the household running (the everyday)
 
-| ID | The household shall... |
-| --- | --- |
+| ID   | The household shall...                                                                                                            |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------- |
 | OR-1 | stay reachable by the Owner through a messaging hall when the servant is away or asleep, for the members who can work without it. |
-| OR-2 | let the members permitted to speak first still reach the Owner when the servant is away or asleep. |
-| OR-3 | keep its records current in a way that is safe to repeat, so re-doing the work changes nothing that was already right. |
-| OR-4 | let the Owner see where each piece of work was done, at home or in the city, and why. |
-| OR-5 | weather the servant coming and going without the Owner losing touch with the members who can carry on without it. |
+| OR-2 | let the members permitted to speak first still reach the Owner when the servant is away or asleep.                                |
+| OR-3 | keep its records current in a way that is safe to repeat, so re-doing the work changes nothing that was already right.            |
+| OR-4 | let the Owner see where each piece of work was done, at home or in the city, and why.                                             |
+| OR-5 | weather the servant coming and going without the Owner losing touch with the members who can carry on without it.                 |
 
 ## 4. What this household is not asked to do
 
